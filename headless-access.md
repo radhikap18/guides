@@ -33,7 +33,7 @@ In this step we will access the terminal on your host machine to make sure the M
 $ ls /dev/tty*
 ```
 
-If a device is detected, you will see one of the following (or similar):
+If a device is detected, you will see a long list of devices. One of these devices should be recognized as the following (or similar):
 
 ### Linux:
 
