@@ -1,34 +1,13 @@
-# Accessing GPIO in terminal on DragonBoard 410c
+# General Purpose Input/Output
 
-In this guide you will learn to access and manipulate the GPIOs via command line using the built in terminal application on your DragonBoard 410c. For this example you WILL NOT need any particular library.
+GPIO provides the basic Input and Output access to the physical world for 96Boards. GPIO pins can perform 'read' and
+'write' operation for controlling devices connected to 96Boards.
 
-> NOTE: Before you start this guide, make sure you have identified the 40 pin low-speed expansion connector on your DragonBoard 410c. This connector will looks like a black bar that runs accross one of the longer sides of your board. It will have two rows of 20 pins totaling 40 pins.
+96Boards provides access to GPIO pins through 40pin **Low Speed Expansion Header** available on all CE boards.
 
-For this exercise we are only concerned about the 12 available (And usable) GPIO pins located on this header.
+## GPIO access through Command Line
 
-|  410c Signals |PIN|PIN|  410c Signals |
-|:--------------|:--|--:|--------------:|
-|    GND        |1  |2  |GND            |
-|               |3  |4  |               |
-|               |5  |6  |               |
-|               |7  |8  |               |
-|               |9  |10 |               |
-|               |11 |12 |               |
-|               |13 |14 |               |
-|               |15 |16 |               |
-|               |17 |18 |               |
-|               |19 |20 |               |
-|               |21 |22 |               |
-|    36         |23 |24 | 12            |
-|    13         |25 |26 | 69            |
-|    115        |27 |28 | 4             |
-|    24         |29 |30 | 25            |
-|    35         |31 |32 | 34            |
-|    26         |33 |34 | 33            |
-|               |35 |36 |               |
-|               |37 |38 |               |
-|    GND        |39 |40 |GND            |
-
+The following instructions are applicable to all Linux based distributions and is based on sysfs interface.
 
 To access the GPIOs through the Linux shell, open the terminal (start menu > other > LXTerminal; right click this to add shortcut to your desktop if you desire) and give yourself super user access:
 
@@ -44,34 +23,48 @@ Once you have superuser access, navigate to the gpio folder with the following c
 # cd /sys/class/gpio
 ```
 
-From within the GPIO folder there are several naming conventions(mentioned above) which can be used to manipulate each function of the GPIO itself.
+Before accessing any GPIO, it needs to be exported using the following command:
 
-
-This will give us the ability to work with a certain GPIO pin - for this example, we will toggle pin 23 which is linked to GPIO_36
 ```shell
 # echo 36 > export
 ```
 
-This returns the direction of the GPIO
+> Note: Each 96Boards uses different SoC(System On Chip) which has different GPIO pins exported. The following list
+specifies the GPIO pins exported by Linux kernel for different CE boards. For mapping these pins to LS expansion header pins,
+consult the board documentation availabe in [Products page](http://www.96boards.org/products/ce/)
+
+> **DragonBoard410c:** 36, 12, 13, 69, 115, 4, 24, 25, 35, 34, 28, 33  
+> **HiKey620:** 488, 489, 490, 491, 492, 415, 463, 495, 426, 433, 427, 434  
+> **Bubblegum:** 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 155, 154 
+
+After exporting GPIO, move into that gpio directory
+```shell
+# cd gpio36
+```
+
+Following command returns the direction of GPIO
 ```shell
 # cat direction
 ```
 
-Sets direction of GPIO - for this example, we will set gpio to "out". You can also toggle gpio as "in".
+Following command sets the direction of GPIO
 ```shell
-# echo out > direction
+# echo [out or in] > direction
 ```
 
-This returns 0 if the pin is off, 1 if the pin is on
+Following command returns 0 if the pin is off, 1 if the pin is on
 ```shell
 # cat value
 ```
 
-Sets value of GPIO - for this example, we will set the gpio "high" which means "1". You can also toggle gpio as "0:
+Following command sets value of GPIO
 ```shell
-# echo 1 > value
+# echo [0 or 1] > value
 ```
 
 Using a multimeter set to measuring voltage, you can probe the pin you are toggleing along with one of the ground nodes (Pins 1,2,39, and 40), to watch the voltage switch between ~1.8V and 0V.
 
+## GPIO access through MRAA library
 
+[MRAA library](https://github.com/intel-iot-devkit/mraa) can be used for accessing GPIO's present on 96Boards. More
+information on accessing GPIO though MRAA is provided [here](https://iotdk.intel.com/docs/master/mraa/gpio_8h.html)
