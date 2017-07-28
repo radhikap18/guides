@@ -14,4 +14,4 @@ This will ensure you have updated your environment repositories and will have ac
 
 `$ sudo apt-get install libmraa-dev`
 
-Congratulations! You have downloaded and installed libmraa to your DragonBoard 410c. Proceed to the [mraa example](mraa-python-example1) to learn how to execute your first python code.
+Congratulations! You have downloaded and installed libmraa to your DragonBoard 410c. Proceed to the [mraa example](mraa-python-example1.md) to learn how to execute your first python code.
